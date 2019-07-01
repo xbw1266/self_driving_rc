@@ -24,21 +24,22 @@ class Process:
 
 
 	def img_callback(self, img_data):
-		if self.i = 0:
+		if self.i == 0:
 			self.save_process(img_data, 'img_0.jpeg', self.dir, self.filename, self.angle)
 			self.t1 = rospy.get_time()	
 			self.i += 1
 		elif rospy.get_time() - self.t1 >= 1:
 			name = 'img_{}.jpeg'.format(self.i)
 			self.save_process(img_data, name, self.dir, self.filename, self.angle)
+			self.t1 = rospy.get_time()
 			self.i += 1
 
 
 
 	def key_callback(self, key_data):
-		if key_data.data == 'L':
+		if key_data.data == 'a':
 			self.angle -= self.delta
-		elif key_data.data == 'R':
+		elif key_data.data == 'd':
 			self.angle += self.delta
 	
 
@@ -51,7 +52,7 @@ class Process:
 		filepath = current_dir + '/' + csv_name
 		with open(filepath, 'a') as f:
 			writer = csv.writer(f)
-			row = [str(rospy.get_time()), current_dir + '/' name, angle]
+			row = [str(rospy.get_time()), current_dir + '/' +  name, angle]
 			writer.writerow(row)
 	
 		
@@ -60,3 +61,4 @@ if __name__ == '__main__':
 	rospy.init_node('image_process')
 	my_process = Process('/raspicam_node/image/compressed', '/keys')
 	rospy.spin()
+

@@ -20,6 +20,11 @@ for line in lines:
 	images.append(image)
 	measurement = float(line[-1])
 	measurements.append(measurement)
+	
+	# now adding data agumentation:
+	images.append(cv2.flip(image))
+	measurements.append(measurement * -1.0)
+
 
 print('image loaded, the dimension is {}'.format(image.shape))
 
@@ -35,14 +40,24 @@ Y_train = np.array(measurements)
 
 # the following is the structures of the CNN:
 from keras.models import Sequential
-from keras.layers import Flatten, Dense
+from keras.layers import Flatten, Dense, Lambda
+from keras.layers.convolutional import Convolution2D
+from keras.layers.pooling import MaxPooling2D
+
 
 model = Sequential()
-model.add(Flatten(input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)) # normalize the data and centralize the data
+model.add(Convolution2D(6,5,5,activation='relu'))
+model.add(MaxPooling2D())
+model.add(Convolution2D(6,5,5,activation='relu'))
+model.add(MaxPooling2D())
+model.add(Flatten())
+model.add(Dense(120))
+model.add(Dense(84))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, Y_train, validation_split=0.2, shuffle=True)
+model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=7)
 
 model.save('model.h5')
 

@@ -8,7 +8,8 @@ import numpy as np
 
 import cv2
 
-filepath = '/home/linjian/Downloads/Raw data/data/'
+filepath = '/home/linjian/Downloads/Raw data/data_new/'
+#filepath = '/home/linjian/Downloads/Raw data/data/'
 filename = 'record.csv'
 lines = []
 #key_map = {"a": [15, 30], "w": [25, 25], "s": [-25,-25], "d": [30, 15], " ": [0, 0]}
@@ -93,28 +94,40 @@ print(Y_train1[0],Y_train1[20])
 #
 ## the following is the structures of the CNN:
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda
+from keras.layers import Flatten, Dense, Lambda, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
+from keras.optimizers import Adam
+from keras import regularizers
 #
 #create model
 model = Sequential()
 #model.add(Convolution2D(36,5,5,subsample=(2,2),activation='relu',input_shape=(IMAGE_SIZE,IMAGE_SIZE,3)))
 model.add(Convolution2D(32,3,3,subsample=(2,2),activation='relu',input_shape=(IMAGE_SIZE,IMAGE_SIZE,3)))
-#model.add(Convolution2D(48,5,5,subsample=(2,2),activation='relu'))
+model.add(Convolution2D(48,3,3,subsample=(2,2),activation='relu'))
 model.add(Convolution2D(64,3,3,subsample=(2,2),activation='relu'))
 model.add(Convolution2D(64,3,3,activation='relu'))
 model.add(MaxPooling2D())
 model.add(Convolution2D(32,3,3,activation='relu'))
+model.add(Dropout(0.15))
 model.add(Flatten())
 model.add(Dense(128,activation='relu'))
-#model.add(Dense(50))
+model.add(Dense(80,activation = 'relu'))
 model.add(Dense(3,activation='softmax'))
 
-#compiling the model
-model.compile(loss='categorical_crossentropy', optimizer='adam')
+#model.add(Dense(128,activation='relu',kernel_regularizer=regularizers.l2(0.01)))
+#model.add(Dense(80,activation='relu',kernel_regularizer=regularizers.l2(0.01)))
+#model.add(Dense(3,activation='softmax'))
 
-model.fit(X_train, Y_train1, validation_split=0.2, shuffle=True, nb_epoch=3)
+#compiling the model
+Learning_rate = 2e-3
+
+epochs = 10
+opt = Adam(lr=Learning_rate,decay=Learning_rate/epochs)
+#model.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=opt,metrics=['accuracy'])
+
+model.fit(X_train, Y_train1, validation_split=0.1, shuffle=True, nb_epoch=epochs)
 
 #add model layers
 #model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)) # normalize the data and centralize the data

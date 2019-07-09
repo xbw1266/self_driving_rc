@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 
-filepath = '/home/bowen/data/'
+filepath = '/home/bowen/data_new/'
 filename = 'record.csv'
 lines = []
 key_map = {"a": [15, 30], "w": [25, 25], "s": [-25,-25], "d": [30, 15], " ": [0, 0]}
@@ -47,8 +47,8 @@ for idx, line in enumerate(lines):
 		measurements_Y1.append(key_map[new_key][0])
 		measurements_Y2.append(key_map[new_key][1])
 	elif line[-1] == ' ':
-		measurements_Y1.append(0)
-		measurements_Y2.append(0)
+		measurements_Y1.append(25)
+		measurements_Y2.append(25)
 #	# now adding data agumentation:
 #	images.append(cv2.flip(image, 1))
 #	measurements.append(180-measurement)

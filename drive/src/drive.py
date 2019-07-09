@@ -29,7 +29,7 @@ class Drive:
 		self.predict()
 		my_str = 'LF{}RF{}\n'.format(self.L, self.R)
 		self.pub.publish(my_str)
-		print('Sending command: {}'.format(my_str))
+	#	print('Sending command: {}'.format(my_str))
 		cv2.imshow('converted', image_d)
 		k = cv2.waitKey(1)
 		if k == 27:
@@ -40,16 +40,23 @@ class Drive:
 	def predict(self):
 		self.y1, self.y2 = np.array(self.model.predict(self.img), dtype=np.uint8)
 		if self.y1 >= 40:
-			self.y1 = 40
+			self.y1 = 30
 		elif self.y1 <= 0:
-			self.y1 = 0
+			self.y1 = 5
 		elif self.y2 >= 40:
-			self.y2 = 40
+			self.y2 = 30
 		elif self.y2 <= 0:
-			self.y2 = 0
+			self.y2 = 5
+#		elif abs(self.y1-self.y2) >= 15:
+#			if self.y1 > self.y2:
+#				self.y1 = 30
+#				self.y2 = 15
+#			else:
+#				self.y1 = 15
+#				self.y2 = 30
 		self.L = chr(self.y1 + 40)
 		self.R = chr(self.y2 + 40)	
-		
+		print('L: {}, R:{}'.format(self.y1, self.y2))
 
 if __name__ == "__main__":
 	rospy.init_node('drive')

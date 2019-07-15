@@ -113,58 +113,6 @@ def draw_boxes(img, bboxes, color=(0, 0, 255), thick=1):
     return imcopy
 
 
-# In[263]:
-Window_size = 55
-
-
-# General method to extact the HOG of the image
-
-def GetFeaturesFromHog(image,orient,cellsPerBlock,pixelsPerCell, visualise= False, feature_vector_flag=True):
-    if(visualise==True):
-        hog_features, hog_image = hog(image, orientations=orient,
-                          pixels_per_cell=(pixelsPerCell, pixelsPerCell), 
-                          cells_per_block=(cellsPerBlock, cellsPerBlock), 
-                          visualise=True, feature_vector=feature_vector_flag)
-        return hog_features, hog_image
-    else:
-        hog_features = hog(image, orientations=orient,
-                          pixels_per_cell=(pixelsPerCell, pixelsPerCell), 
-                          cells_per_block=(cellsPerBlock, cellsPerBlock), 
-                          visualise=False, feature_vector=feature_vector_flag)
-        return hog_features
-
-
-# In[264]:
-
-
-
-#Convert Image Color Space. Note the colorspace parameter is like cv2.COLOR_RGB2YUV
-def ConvertImageColorspace(image, colorspace):
-    return cv2.cvtColor(image, colorspace)
-
-
-# In[265]:
-
-
-# Method to extract the features based on the choices as available in step 2
-
-def ExtractFeatures(images,orientation,cellsPerBlock,pixelsPerCell, convertColorspace=False):
-    featureList=[]
-    imageList=[]
-    for image in images:
-        if(convertColorspace==True):
-            image= cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
-        local_features_1=GetFeaturesFromHog(image[:,:,0],orientation,cellsPerBlock,pixelsPerCell, False, True)
-        local_features_2=GetFeaturesFromHog(image[:,:,1],orientation,cellsPerBlock,pixelsPerCell, False, True)
-        local_features_3=GetFeaturesFromHog(image[:,:,2],orientation,cellsPerBlock,pixelsPerCell, False, True)
-        x=np.hstack((local_features_1,local_features_2,local_features_3))
-        featureList.append(x)
-    return featureList
-
-
-# In[266]:
-
-
 
 # function to find the windows on which we are going to run the classifier
 
@@ -241,37 +189,6 @@ def DrawCars(image,windows, converColorspace=False):
 # In[271]:
 
 
-def DrawCarsOptimised(image, image1, image2,windows, converColorspace=False):
-    refinedWindows=[]
-    for window in windows:
-        
-        start= window[0]
-        end= window[1]
-        clippedImage=image[start[1]:end[1], start[0]:end[0]]
-        clippedImage1=image1[start[1]:end[1], start[0]:end[0]]
-        clippedImage2=image2[start[1]:end[1], start[0]:end[0]]
-        
-        if(clippedImage.shape[1] == clippedImage.shape[0] and clippedImage.shape[1]!=0):
-            
-            clippedImage=cv2.resize(clippedImage, (Window_size,Window_size)).ravel()
-            clippedImage1=cv2.resize(clippedImage1, (Window_size,Window_size)).ravel()
-            clippedImage2=cv2.resize(clippedImage2, (Window_size,Window_size)).ravel()
-            
-            #f1=ExtractFeatures([clippedImage], 9 , 2 , 16,converColorspace)
-            f1= np.hstack((clippedImage,clippedImage1,clippedImage2))
-            f1=scaler.transform(f1.reshape(1,-1))   
-            print(f1.shape)
-            predictedOutput=model.predict([f1[0]])
-            if(predictedOutput==14): #14 should be stop sign
-                refinedWindows.append(window)
-        
-    return refinedWindows
-
-
-
-# In[7]:
-
-
 
 # In[285]:
 
@@ -287,13 +204,13 @@ print(image.shape)
 # image = cv2.resize(image,(200,200))
 
 image = cv2.resize(image,(int((image.shape[1])/10),int(image.shape[0]/10)),interpolation = cv2.INTER_AREA )
-
-# image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-# image = Image.fromarray(image)
-# image = np.asarray(image)
-
-plt.imshow(image)
-plt.show()
+#
+## image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+## image = Image.fromarray(image)
+## image = np.asarray(image)
+#
+#plt.imshow(image)
+#plt.show()
 
 # windows1 = slide_window(image, x_start_stop=[100,200], y_start_stop=[100,200], 
 #                     xy_window=(50,50), xy_overlap=(0.15, 0.15))
@@ -461,7 +378,7 @@ def draw_labeled_bboxes(img, labels):
 
 #testing our heat function
 
-heat = np.zeros_like(image[:,:,0]).astype(np.float)
+heat = np.zeros_like(window_img[:,:,0]).astype(np.float)
 
 heat = add_heat(heat,refinedWindows)
     

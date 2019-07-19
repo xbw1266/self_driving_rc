@@ -34,11 +34,5 @@ class Img_process:
 		target = cv2.bitwise_and(self.blur, self.blur, mask = mask)
 		self.target = target
 		return self.target
-  
-	def binary(self, threshold):
-		ret,bw_image = cv2.threshold(self.target,threshold,255,cv2.THRESH_BINARY)
-		self.bw_image = np.expand_dims(bw_image[:,:,1], axis=2)
-		#print(self.bw_image.shape)
-		return self.bw_image
-    
+
 		

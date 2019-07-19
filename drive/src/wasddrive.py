@@ -17,10 +17,9 @@ class Drive:
 		self.model._make_predict_function()
 		self.sub1 = rospy.Subscriber(img_topic, CompressedImage, self.img_process)
 		self.sub2 = rospy.Subscriber(img_topic, CompressedImage, self.stop_process)
-		self.sub3 = rospy.Subscriber('/lights', String, self.dt_lights)
+	#	self.sub3 = rospy.Subscriber('/lights', String, self.dt_lights)
 		self.pub = rospy.Publisher('/keys', String, queue_size=1)
-		self.pubstop = rospy.Publisher('/stopsign',stop_msg,queue_size=1)
-		self.publight = rospy.Publisher('/trafficlight',stop_msg,queue_size=1)
+		self.pubstop = rospy.Publisher('behavior_msg',behavior_msg,queue_size=1)
 		self.cascade = cv2.CascadeClassifier('/home/bowen/cascade_model/cascade.xml')
 		self.stop = False
 		self.stop_action = False
@@ -86,7 +85,7 @@ class Drive:
 	#	gray = cv2.resize(self.image, (320,160))
 		gray = cv2.cvtColor(arr, cv2.COLOR_BGR2GRAY)
 		if len(stops) <= 0:
-		stops = self.cascade.detectMultiScale(gray)
+			stops = self.cascade.detectMultiScale(gray)
 			self.stop = False
 			cv2.imshow('stop_sign', gray)
 			k = cv2.waitKey(1)

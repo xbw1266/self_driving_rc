@@ -37,6 +37,9 @@ add_executable(behavior_test_node
   behavior_test.cpp
   blackboard/blackboard.h
   behavior_tree/behavior_node.h
+  Actions/Stop_action.h
+  Actions/Redlight_action.h
+  Actions/Move_action.h
   )
 
 target_link_libraries(behavior_test_node

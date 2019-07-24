@@ -8,7 +8,10 @@ from std_msgs.msg import String
 import numpy as np
 from data_preprocess import Img_process
 import cv2
+<<<<<<< HEAD
 from robot_decisions.msg import behavior_msg
+=======
+>>>>>>> master
 print('Packages loaded')
 
 class Drive:
@@ -17,9 +20,14 @@ class Drive:
 		self.model._make_predict_function()
 		self.sub1 = rospy.Subscriber(img_topic, CompressedImage, self.img_process)
 		self.sub2 = rospy.Subscriber(img_topic, CompressedImage, self.stop_process)
+<<<<<<< HEAD
 	#	self.sub3 = rospy.Subscriber('/lights', String, self.dt_lights)
 		self.pub = rospy.Publisher('/keys', String, queue_size=1)
 		self.pubstop = rospy.Publisher('behavior_msg',behavior_msg,queue_size=1)
+=======
+		self.sub3 = rospy.Subscriber('/lights', String, self.dt_lights)
+		self.pub = rospy.Publisher('/keys', String, queue_size=1)
+>>>>>>> master
 		self.cascade = cv2.CascadeClassifier('/home/bowen/cascade_model/cascade.xml')
 		self.stop = False
 		self.stop_action = False
@@ -30,11 +38,14 @@ class Drive:
 		self.id = 1
 		self.stop_light = False
 		self.t2 = 0
+<<<<<<< HEAD
 	
 		##behavior msg init
 		self.behavior = behavior_msg() 
 		self.behavior.stop_sign = False
 		self.behavior.traffic_light = False
+=======
+>>>>>>> master
 		
 	def img_process(self, img_data):
 		np_arr = np.fromstring(img_data.data, np.uint8)
@@ -69,8 +80,11 @@ class Drive:
 		k = cv2.waitKey(1)
 		if k == 27:
 			cv2.destroyAllWindows()
+<<<<<<< HEAD
 		self.behavior.move = self.key
 		
+=======
+>>>>>>> master
 
 	def predict(self):
 		key_map = ['w', 'a', 'd']
@@ -84,8 +98,13 @@ class Drive:
 	#	while self.image is not None:
 	#	gray = cv2.resize(self.image, (320,160))
 		gray = cv2.cvtColor(arr, cv2.COLOR_BGR2GRAY)
+<<<<<<< HEAD
 		if len(stops) <= 0:
 			stops = self.cascade.detectMultiScale(gray)
+=======
+		stops = self.cascade.detectMultiScale(gray)
+		if len(stops) <= 0:
+>>>>>>> master
 			self.stop = False
 			cv2.imshow('stop_sign', gray)
 			k = cv2.waitKey(1)
@@ -103,7 +122,11 @@ class Drive:
 			k = cv2.waitKey(1)
 			if k == 27:
 				cv2.destroyAllWindows()
+<<<<<<< HEAD
 		self.behavior.stop = self.stop
+=======
+		
+>>>>>>> master
 		
 	def dt_lights(self,data):
 		print(data.data)
@@ -114,7 +137,11 @@ class Drive:
 			self.pub.publish(' ')
 		elif data.data == 'G':
 			self.stop_light = False
+<<<<<<< HEAD
 		self.behavior.traffic_light = self.stop_light
+=======
+
+>>>>>>> master
 
 
 

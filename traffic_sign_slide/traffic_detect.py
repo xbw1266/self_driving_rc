@@ -83,6 +83,27 @@ class traffic_sign_detect:
     def loadimage(self,image_name):
         #image = cv2.imread(image_name)i
         image = image_name
+<<<<<<< HEAD
+        self.image = cv2.resize(image,(int((image.shape[1])/5),int(image.shape[0]/5)),interpolation = cv2.INTER_AREA )
+
+    def find_box(self):
+        #windows1 = self.slide_window(self.image,   
+        #                    xy_window=(50,50), xy_overlap=(0.20, 0.20))
+        #windows4 = self.slide_window(self.image, 
+        #                    xy_window=(55,55), xy_overlap=(0.25, 0.25))
+        #windows2 = self.slide_window(self.image,  
+        #                    xy_window=(60,60), xy_overlap=(0.30, 0.30))
+        #windows3 = self.slide_window(self.image, 
+        #                    xy_window=(65,65), xy_overlap=(0.40, 0.40))
+        #windows = windows1 + windows2 +  windows3 + windows4
+        windows4 = self.slide_window(self.image, 
+                            xy_window=(40,40), xy_overlap=(0.20, 0.20))
+        windows1 = self.slide_window(self.image,   
+                            xy_window=(50,50), xy_overlap=(0.3, 0.3))
+        windows3 = self.slide_window(self.image, 
+                            xy_window=(55,55), xy_overlap=(0.40, 0.40))
+        windows = windows1 +  windows4+windows3
+=======
         self.image = cv2.resize(image,(int((image.shape[1])/3),int(image.shape[0]/3)),interpolation = cv2.INTER_AREA )
 
     def find_box(self):
@@ -95,14 +116,18 @@ class traffic_sign_detect:
         windows3 = self.slide_window(self.image, 
                             xy_window=(65,65), xy_overlap=(0.40, 0.40))
         windows = windows1 + windows2 +  windows3 + windows4
+>>>>>>> master
         print("Total No of windows are ",len(windows))
         self.refinedWindows=self.DrawCars(self.image,windows, True)
         window_img = self.draw_boxes(self.image, windows) 
         window_img_refined = self.draw_boxes(self.image,self.refinedWindows) 
         self.window_img = window_img_refined
         if(self.showimage):
+<<<<<<< HEAD
+=======
             #plt_img = cv2.hconcat([window_img,window_img_refined])
             #cv2.imshow('box image',plt_img)
+>>>>>>> master
             cv2.imshow('box image',window_img_refined)
             cv2.waitKey(1)
         #if(self.showimage):

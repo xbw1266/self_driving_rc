@@ -5,3 +5,5 @@ Untill now, the car has the ablity to drive itself within the lane, stop at the 
 We are adding more features to the car, including Lidar SLAM, which enables localization and mapping. The car will plan the route to the destination based on the map generated from the SLAM while complying with the traffic rules along the trip.
 
 Please email me at bxie1@ualberta.ca for any question!
+
+[Youtube DEMO](https://youtu.be/jP_zEGXf_p0)

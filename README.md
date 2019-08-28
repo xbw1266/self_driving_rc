@@ -6,4 +6,7 @@ We are adding more features to the car, including Lidar SLAM, which enables loca
 
 Please email me at bxie1@ualberta.ca for any question!
 
+
+[![IMAGE ALT TEXT](https://github.com/xbw1266/self_driving_rc/blob/master/IMG_2440.jpg)]
+(https://youtu.be/jP_zEGXf_p0 "Video Title")
 [Youtube DEMO](https://youtu.be/jP_zEGXf_p0)
